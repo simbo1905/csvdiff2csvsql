@@ -74,5 +74,5 @@ m,n,o
 m,n,2
 ```
 
-Note that the modifed query shows each changed line from the first file followed by the new line in the second file. 
+Note that the modifed queries shows each changed line from the first file followed by the new line in the second file. 
 
