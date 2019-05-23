@@ -47,15 +47,15 @@ csvsql --query "select * from left where 1=1 and one='m' and two='n'" left.csv
 csvsql --query "select * from right where 1=1 and one='m' and two='n'" right.csv
 ```
 
-Note that csvquery outputs the header for each query and each query selects only one file. You can run all the commands and filter out all the headers using awk with:
+Note that csvquery outputs the header for each query result and each query selects only one file. You can run all the commands and filter out all the header lines using awk:
 
 ```
 echo Added
-bash < added | awk 'NR % 2 == 0' 2>/dev/null
+bash < added | awk 'NR % 2 == 0' 
 echo Removed
-bash < removed | awk 'NR % 2 == 0' 2>/dev/null
+bash < removed | awk 'NR % 2 == 0' 
 echo Modified
-bash < modified | awk 'NR % 2 == 0' 2>/dev/null
+bash < modified | awk 'NR % 2 == 0' 
 ```
 
 This will give output:
