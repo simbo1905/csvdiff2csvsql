@@ -1,7 +1,9 @@
 
 import unittest
+from tempdir import TempDir
 from csvdiff2csvsql import modified_to_queries
 from csvdiff2csvsql import added_to_queries
+from csvdiff2csvsql import removed_to_queries
 
 
 class Cvsdiff2CvssqlTests(unittest.TestCase):
@@ -81,6 +83,34 @@ csvsql --query "select * from right where 1=1 and zero='x' and one='u'" right.cs
         result = added_to_queries(diff, "right")
         self.assertEqual(result.strip(), expected.strip())
 
+
+    def test_removed_to_queries(self):
+        diff = '''
+    {
+      "_index": [
+        "zero", 
+        "one"
+      ], 
+      "removed": [
+        {
+          "one": "r", 
+          "three": "t", 
+          "two": "s", 
+          "zero": "p"
+        },
+        {
+          "one": "u", 
+          "three": "v", 
+          "two": "w", 
+          "zero": "x"
+        }
+      ]
+    }
+    '''
+        expected = '''csvsql --query "select * from left where 1=1 and zero='p' and one='r'" left.csv
+csvsql --query "select * from left where 1=1 and zero='x' and one='u'" left.csv'''
+        result = removed_to_queries(diff, "left")
+        self.assertEqual(result.strip(), expected.strip())
 
 
 if __name__ == '__main__':
