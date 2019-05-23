@@ -5,9 +5,8 @@ import argparse
 
 def modified_to_queries(diff, left_name, right_name):
     result = ''
-    obj = json.loads(diff)
-    pk_names=obj["_index"]
-    changed = obj["changed"]
+    pk_names = diff["_index"]
+    changed = diff["changed"]
     for change in changed:
         pk_values = change["key"]
         result += query_via_pk(left_name, pk_names, pk_values)
@@ -31,9 +30,8 @@ def added_to_queries(diff, right_name):
 
 def rows_to_queries(diff, right_name, operation):
     result = ''
-    obj = json.loads(diff)
-    pk_names = obj["_index"]
-    changed = obj[operation]
+    pk_names = diff["_index"]
+    changed = diff[operation]
     for add in changed:
         pk_tuples = map(lambda n: (n, add[n]), pk_names)
         pk_names, pk_values = zip(*pk_tuples)
@@ -50,7 +48,17 @@ if __name__ == '__main__':
     parser.add_argument("first_csv", help="The first csv file to compare")
     parser.add_argument("second_csv", help="The second csv file to compare")
     args = parser.parse_args()
-    left = args.left
-    right = args.right
-    data = json.load(sys.stdin)
+    left = args.first_csv
+    right = args.second_csv
+    output_prefix=""
+    diff = json.load(sys.stdin)
+    f = open("added", "w")
+    f.write(added_to_queries(diff, right))
+    f.close()
+    f = open("removed", "w")
+    f.write(removed_to_queries(diff, left))
+    f.close()
+    f = open("modified", "w")
+    f.write(modified_to_queries(diff, left, right))
+    f.close()
 

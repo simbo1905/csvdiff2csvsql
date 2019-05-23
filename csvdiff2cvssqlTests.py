@@ -1,6 +1,6 @@
 
 import unittest
-from tempdir import TempDir
+import json
 from csvdiff2csvsql import modified_to_queries
 from csvdiff2csvsql import added_to_queries
 from csvdiff2csvsql import removed_to_queries
@@ -51,7 +51,7 @@ class Cvsdiff2CvssqlTests(unittest.TestCase):
 csvsql --query "select * from right where 1=1 and zero='e' and one='f'" right.csv
 csvsql --query "select * from left where 1=1 and zero='m' and one='n'" left.csv
 csvsql --query "select * from right where 1=1 and zero='m' and one='n'" right.csv'''
-        result = modified_to_queries(diff, "left", "right")
+        result = modified_to_queries(json.loads(diff), "left", "right")
         self.assertEqual(result.strip(), expected.strip())
 
 
@@ -80,7 +80,7 @@ csvsql --query "select * from right where 1=1 and zero='m' and one='n'" right.cs
     '''
         expected = '''csvsql --query "select * from right where 1=1 and zero='p' and one='r'" right.csv
 csvsql --query "select * from right where 1=1 and zero='x' and one='u'" right.csv'''
-        result = added_to_queries(diff, "right")
+        result = added_to_queries(json.loads(diff), "right")
         self.assertEqual(result.strip(), expected.strip())
 
 
@@ -109,7 +109,7 @@ csvsql --query "select * from right where 1=1 and zero='x' and one='u'" right.cs
     '''
         expected = '''csvsql --query "select * from left where 1=1 and zero='p' and one='r'" left.csv
 csvsql --query "select * from left where 1=1 and zero='x' and one='u'" left.csv'''
-        result = removed_to_queries(diff, "left")
+        result = removed_to_queries(json.loads(diff), "left")
         self.assertEqual(result.strip(), expected.strip())
 
 
