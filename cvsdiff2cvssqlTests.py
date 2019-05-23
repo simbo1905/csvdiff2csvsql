@@ -1,9 +1,9 @@
 
 import unittest
-from csvdiff2csvsql import diff2sql
+from csvdiff2csvsql import modified_to_queries
 
-class MyTestCase(unittest.TestCase):
-    def test_default_greeting_set(self):
+class Cvsdiff2CvssqlTests(unittest.TestCase):
+    def test_modified_to_queries(self):
         diff = '''
 {
   "_index": [
@@ -58,14 +58,12 @@ class MyTestCase(unittest.TestCase):
   ]
 }
 '''
-        expected = '''
-csvsql --query "select * from left where zero='e' and one='f'" left.csv
-csvsql --query "select * from right where zero='m' and one='n'" right.csv
-csvsql --query "select * from left where zero='e' and one='f'" left.csv
-csvsql --query "select * from right where zero='m' and one='n'" right.csv
-'''
-        result = diff2sql(diff)
-        self.assertEqual(result, expected)
+        expected = '''csvsql --query "select * from left where 1=1 and zero='e' and one='f'" left.csv
+csvsql --query "select * from right where 1=1 and zero='e' and one='f'" right.csv
+csvsql --query "select * from left where 1=1 and zero='m' and one='n'" left.csv
+csvsql --query "select * from right where 1=1 and zero='m' and one='n'" right.csv'''
+        result = modified_to_queries(diff, "left", "right")
+        self.assertEqual(result.strip(), expected.strip())
 
 if __name__ == '__main__':
     unittest.main()
