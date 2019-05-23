@@ -5,7 +5,6 @@ def modified_to_queries(diff, left_name, right_name):
     result = ''
     obj = json.loads(diff)
     pk_names=obj["_index"]
-    print str(pk_names)
     changed = obj["changed"]
     for change in changed:
         pk_values = change["key"]
@@ -21,5 +20,17 @@ def query_via_pk(table, pk_names, pk_values):
         result += " and " + name + "='" + value + "'"
     result += "\" "+table+".csv"
     result += '\n'
+    return result
+
+
+def added_to_queries(diff, right_name):
+    result = ''
+    obj = json.loads(diff)
+    pk_names=obj["_index"]
+    changed = obj["added"]
+    for add in changed:
+        pk_tuples = map(lambda n: (n,add[n]), pk_names)
+        pk_names, pk_values = zip(*pk_tuples)
+        result += query_via_pk(right_name, pk_names, pk_values)
     return result
 
