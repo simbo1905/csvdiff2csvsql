@@ -76,3 +76,6 @@ m,n,2
 
 Note that the modifed queries shows each changed line from the first file followed by the new line in the second file. 
 
+# Performance 
+
+Currently the script fires up csvsql repeatedly to extract each line. That is inefficient as that tool loads all the data into a new SQLite DB to extract one line at a time. Instead the sql should be a single query for all rows in a given file. That shouldn’t be too hard to do so it’s on my todo list. 
