@@ -11,6 +11,8 @@ pip install csvkit
 
 # Example
 
+The following example assumes a compound primary key that is the first two columns is the match key: 
+
 ```
 $ head left.csv right.csv 
 ==> left.csv <==
