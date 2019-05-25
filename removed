@@ -1,2 +1,0 @@
-csvsql --query "select * from left where 1=1 and one='p' and two='q'" left.csv
-csvsql --query "select * from left where 1=1 and one='w' and two='x'" left.csv

@@ -1,4 +1,0 @@
-csvsql --query "select * from left where 1=1 and one='d' and two='e'" left.csv
-csvsql --query "select * from right where 1=1 and one='d' and two='e'" right.csv
-csvsql --query "select * from left where 1=1 and one='m' and two='n'" left.csv
-csvsql --query "select * from right where 1=1 and one='m' and two='n'" right.csv

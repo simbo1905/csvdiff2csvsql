@@ -1,0 +1,1 @@
+csvsql --query "select * from right where ( one='a' and two='b' ) or ( one='s' and two='t' )" right.csv

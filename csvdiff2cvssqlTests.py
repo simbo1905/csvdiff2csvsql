@@ -12,45 +12,43 @@ class Cvsdiff2CvssqlTests(unittest.TestCase):
         diff = '''
     {
       "_index": [
-        "zero", 
+        "zero",
         "one"
-      ], 
+      ],
       "changed": [
         {
           "fields": {
             "two": {
-              "from": "g", 
+              "from": "g",
               "to": "xxx"
             }
-          }, 
+          },
           "key": [
-            "e", 
+            "e",
             "f"
           ]
-        }, 
+        },
         {
           "fields": {
             "three": {
-              "from": "p", 
+              "from": "p",
               "to": "xxx"
-            }, 
+            },
             "two": {
-              "from": "o", 
+              "from": "o",
               "to": "p"
             }
-          }, 
+          },
           "key": [
-            "m", 
+            "m",
             "n"
           ]
         }
-      ] 
+      ]
     }
     '''
-        expected = '''csvsql --query "select * from left where 1=1 and zero='e' and one='f'" left.csv
-csvsql --query "select * from right where 1=1 and zero='e' and one='f'" right.csv
-csvsql --query "select * from left where 1=1 and zero='m' and one='n'" left.csv
-csvsql --query "select * from right where 1=1 and zero='m' and one='n'" right.csv'''
+        expected = '''csvsql --query "select * from left where ( zero='e' and one='f' ) or ( zero='m' and one='n' )" left.csv
+csvsql --query "select * from right where ( zero='e' and one='f' ) or ( zero='m' and one='n' )" right.csv'''
         result = modified_to_queries(json.loads(diff), "left", "right")
         self.assertEqual(result.strip(), expected.strip())
 
@@ -78,8 +76,9 @@ csvsql --query "select * from right where 1=1 and zero='m' and one='n'" right.cs
       ]
     }
     '''
-        expected = '''csvsql --query "select * from right where 1=1 and zero='p' and one='r'" right.csv
-csvsql --query "select * from right where 1=1 and zero='x' and one='u'" right.csv'''
+        expected = '''
+        csvsql --query "select * from right where ( zero='p' and one='r' ) and ( zero='x' and one='u' )" right.csv
+        '''
         result = added_to_queries(json.loads(diff), "right")
         self.assertEqual(result.strip(), expected.strip())
 
@@ -107,8 +106,9 @@ csvsql --query "select * from right where 1=1 and zero='x' and one='u'" right.cs
       ]
     }
     '''
-        expected = '''csvsql --query "select * from left where 1=1 and zero='p' and one='r'" left.csv
-csvsql --query "select * from left where 1=1 and zero='x' and one='u'" left.csv'''
+        expected = '''
+                csvsql --query "select * from left where ( zero='p' and one='r' ) and ( zero='x' and one='u' )" left.csv
+                '''
         result = removed_to_queries(json.loads(diff), "left")
         self.assertEqual(result.strip(), expected.strip())
 

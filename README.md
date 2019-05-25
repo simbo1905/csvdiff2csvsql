@@ -11,7 +11,9 @@ pip install csvkit
 
 # Example
 
-The following example assumes a compound primary key that is the first two columns is the match key: 
+The following example is in the folder `example` which you can run as `demo.sh`.
+
+Here we use a compound primary key to match on:
 
 ```
 $ head left.csv right.csv 
@@ -35,49 +37,87 @@ $ csvdiff one,two left.csv right.csv |./csvdiff2csvsql.py left right
 
 $ head added removed modified
 ==> added <==
-csvsql --query "select * from right where 1=1 and one='a' and two='b'" right.csv
-csvsql --query "select * from right where 1=1 and one='s' and two='t'" right.csv
-
+csvsql --query "select * from right where ( one='a' and two='b' ) or ( one='s' and two='t' )" right.csv
 ==> removed <==
-csvsql --query "select * from left where 1=1 and one='p' and two='q'" left.csv
-csvsql --query "select * from left where 1=1 and one='w' and two='x'" left.csv
-
+csvsql --query "select * from left where ( one='p' and two='q' ) or ( one='w' and two='x' )" left.csv
 ==> modified <==
-csvsql --query "select * from left where 1=1 and one='d' and two='e'" left.csv
-csvsql --query "select * from right where 1=1 and one='d' and two='e'" right.csv
-csvsql --query "select * from left where 1=1 and one='m' and two='n'" left.csv
-csvsql --query "select * from right where 1=1 and one='m' and two='n'" right.csv
+csvsql --query "select * from left where ( one='d' and two='e' ) or ( one='m' and two='n' )" left.csv
+csvsql --query "select * from right where ( one='d' and two='e' ) or ( one='m' and two='n' )" right.csv
 ```
 
-Note that csvquery outputs the header for each query result and each query selects only one row (see performance section below). You can run all the commands and filter out all the header lines using awk:
+We can run the extracts with:
 
 ```
-echo Added
-bash < added | awk 'NR % 2 == 0' 
-echo Removed
-bash < removed | awk 'NR % 2 == 0' 
-echo Modified
-bash < modified | awk 'NR % 2 == 0' 
+set echo off
+printf 'Added\n====='
+bash < added 
+printf 'Removed\n====='
+bash < removed
+printf 'Modified\n====='
+bash < modified
+set echo on
 ```
 
 This will give output:
 
 ```
 Added
+=====
 a,b,c
 s,t,u
 Removed
+=======
 p,q,r
 w,x,y
 Modified
+========
+one,two,three
+d,e,f
+m,n,o
+one,two,three
+d,e,1
+m,n,2
+```
+
+The modified output is selecting all lines from `left.csv` then `right.csv`. We can redirect this into 
+two files: 
+
+```bash
+# first redirect into two files 1.txt and 2.txt
+printf ' > 1.txt\n > 2.txt' > redirects
+paste modified redirects | bash
+head 1.txt 2.txt
+```
+
+Which outputs: 
+
+```bash
+==> 1.txt <==
+one,two,three
+d,e,f
+m,n,o
+
+==> 2.txt <==
+one,two,three
+d,e,1
+m,n,2
+```
+
+We can use the command `paste` interlace this into a single with the change lines stacked together: 
+pairs which is easier to check by eye: 
+
+```bash
+paste -d '\n' 1.txt 2.txt
+```
+
+This outputs: 
+
+```bash
+one,two,three
+one,two,three
 d,e,f
 d,e,1
 m,n,o
 m,n,2
 ```
 
-Note that the modifed queries shows each changed line from the first file followed by the new line in the second file. 
-
-# Performance 
-
-Currently the script fires up csvsql repeatedly to extract each line. That is inefficient as that tool loads all the data into a new SQLite DB to extract one line at a time. Instead the sql should be a single query for all rows in a given file. That shouldn’t be too hard to do so it’s on my todo list. 

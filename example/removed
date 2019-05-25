@@ -1,0 +1,1 @@
+csvsql --query "select * from left where ( one='p' and two='q' ) or ( one='w' and two='x' )" left.csv
