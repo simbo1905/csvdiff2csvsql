@@ -40,7 +40,7 @@ We run diff and pipe it to csvdiff2csvsql:
 $ csvdiff one,two left.csv right.csv |./csvdiff2csvsql.py left right
 ```
 
-This gives us three files. One to extraced added lines, one to extracted removed lines, adn one to extract modified lines:
+This gives us three files. One to extract added lines, one to extract removed lines, and one to extract modified lines:
 
 ```bash
 $ head added removed modified
