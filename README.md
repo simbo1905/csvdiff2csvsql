@@ -55,7 +55,7 @@ csvsql --query "select * from right where ( one='d' and two='e' ) or ( one='m' a
 
 We can run one of them by throwing it at bash:
 
-`bash < deleted`
+`bash < removed`
 
 Let's run all three with some display output:
 
