@@ -122,7 +122,7 @@ d,e,1
 m,n,2
 ```
 
-We can use the command `paste` interlace these two files into a single with the changes`stacked together in pairs which is easier to check by eye: 
+We can use the command `paste` to interlace these two files into a single file with the changes stacked together in pairs which is easier to check by eye: 
 
 ```bash
 paste -d '\n' 1.txt 2.txt
