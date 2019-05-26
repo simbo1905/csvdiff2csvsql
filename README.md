@@ -53,7 +53,11 @@ csvsql --query "select * from left where ( one='d' and two='e' ) or ( one='m' an
 csvsql --query "select * from right where ( one='d' and two='e' ) or ( one='m' and two='n' )" right.csv
 ```
 
-We can run the generated extract commands with:
+We can run one of them by throwing it at bash:
+
+`bash < deleted`
+
+Let's run all three with some display output:
 
 ```
 set echo off
