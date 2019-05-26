@@ -1,6 +1,6 @@
 # csvdiff2csvsql
 
-A script that takes the output of [csvdiff](https://github.com/larsyencken/csvdiff) and generates [csvquery](https://csvkit.readthedocs.io/en/latest/) commands to extract the rows that are added, removed and modified. The motivation for this script is help people inspect sparse differences in large CSV reports.
+A script that takes the output of [csvdiff](https://github.com/larsyencken/csvdiff) and generates [csvquery](https://csvkit.readthedocs.io/en/latest/) commands to extract the rows that are added, removed and modified. The motivation for this script is to help people inspect sparse differences in large CSV reports.
 
 # Prerequisites
 
@@ -57,10 +57,13 @@ We can run the generated extract commands with:
 
 ```
 set echo off
+echo
 printf 'Added\n====='
 bash < added 
+echo
 printf 'Removed\n====='
 bash < removed
+echo
 printf 'Modified\n====='
 bash < modified
 set echo on
@@ -71,12 +74,16 @@ This will give output:
 ```
 Added
 =====
+one,two,three
 a,b,c
 s,t,u
+
 Removed
 =======
+one,two,three
 p,q,r
 w,x,y
+
 Modified
 ========
 one,two,three
@@ -96,7 +103,7 @@ printf ' > 1.txt\n > 2.txt' > redirects
 paste modified redirects | bash
 ```
 
-Which gits use the following two files: 
+Which gives us the following two files: 
 
 ```bash
 head 1.txt 2.txt
@@ -127,4 +134,3 @@ d,e,1
 m,n,o
 m,n,2
 ```
-
