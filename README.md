@@ -1,6 +1,6 @@
 # csvdiff2csvsql
 
-A script that takes the output of [csvdiff](https://github.com/larsyencken/csvdiff) and generates [csvquery](https://csvkit.readthedocs.io/en/latest/) commands to extract the rows that are added, removed and modified. The motivation for this script is to help people inspect sparse differences in large CSV reports.
+A script that takes the output of [csvdiff](https://github.com/larsyencken/csvdiff) and generates [csvsql](https://csvkit.readthedocs.io/en/latest/) commands to extract the rows that are added, removed and modified. The motivation for this script is to help people inspect sparse differences in large CSV reports.
 
 # Prerequisites
 
